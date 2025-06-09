@@ -12,22 +12,22 @@ public class UserEntity
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userId;
-	private String firstName;
+	private Integer user_id;
+	private String first_name;
 	private String email;
 	private String password;
-	private String profilePicturePath;
+	private String profile_picture_path;
 	public Integer getUserId() {
-		return userId;
+		return user_id;
 	}
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUserId(Integer user_id) {
+		this.user_id = user_id;
 	}
 	public String getFirstName() {
-		return firstName;
+		return first_name;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirstName(String first_name) {
+		this.first_name = first_name;
 	}
 	public String getEmail() {
 		return email;
@@ -42,10 +42,10 @@ public class UserEntity
 		this.password = password;
 	}
 	public String getProfilePicturePath() {
-		return profilePicturePath;
+		return profile_picture_path;
 	}
-	public void setProfilePicturePath(String profilePicturePath) {
-		this.profilePicturePath = profilePicturePath;
+	public void setProfilePicturePath(String profile_picture_path) {
+		this.profile_picture_path = profile_picture_path;
 	}
 	
 }

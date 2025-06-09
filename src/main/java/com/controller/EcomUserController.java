@@ -10,6 +10,10 @@ import com.DTO.EcomUserRequest;
 import com.entity.UserEntity;
 import com.repository.EcomUserRepository;
 import com.service.fileUploadService;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 
 @Controller
 public class EcomUserController 
@@ -28,7 +32,7 @@ public class EcomUserController
 	
 	@PostMapping("/esignup")
 	public String signupPost(EcomUserRequest userRequest, Model model) {
-	    boolean isError = false;
+//	    boolean isError = false;
 
 	    // Upload user image (save to file system)
 	    if (userRequest.getProfilePicture() != null && !userRequest.getProfilePicture().isEmpty()) {
@@ -53,5 +57,27 @@ public class EcomUserController
 	    model.addAttribute("error", "Profile picture is required");
 	    return "EcomSignUp";
 	}
-
+	
+	@GetMapping("elogin")
+	public String Elogin() 
+	{
+		
+		return "EcomLogin";
+	}
+	@PostMapping("/elogin")
+	public String EcomLogin(UserEntity user , Model model) {
+		
+		UserEntity dbUser = userdao.findByEmailAndPassword(user.getEmail(), user.getPassword());
+		System.out.println(dbUser.getFirstName());
+		System.out.println(dbUser.getProfilePicturePath());
+		model.addAttribute("firstName", dbUser.getFirstName());
+		model.addAttribute("profilePicturePath",dbUser.getProfilePicturePath());
+		return "Welcome";
+	}
+	@GetMapping("/ehome")
+	public String eHome()
+	{
+		return "Welcome";
+	}
+	
 }
