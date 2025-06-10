@@ -24,35 +24,6 @@ public class EcomProductController
 	@Autowired
 	EcomProductRepository productdao;
 	
-	@GetMapping("/newproduct")
-	public String newProduct() 
-	{
-		return "EcomNewProduct";
-	}
-	
-	@PostMapping("/saveproduct")
-	public String saveProduct(EcomProductRequest productrequest , Model model) 
-	{
-		fileuploadservice.uploadproductImage(productrequest.getProductImage());
-		String filepath = "images//products//"+productrequest.getProductImage().getOriginalFilename();
-		EcomProductEntity productentity = new EcomProductEntity();
-		productentity.setProductName(productrequest.getProductName());
-		productentity.setCategory(productrequest.getCategory());
-		productentity.setQty(productrequest.getQty());
-		productentity.setPrice(productrequest.getPrice());
-		productentity.setProductImagePath(filepath);
-		productdao.save(productentity);
-		return "redirect:/products";
-	}
-	
-	@GetMapping("/products")
-	public String Products(Model model) 
-	{
-		List<EcomProductEntity> products = productdao.findTop9();
-		model.addAttribute("products", products);
-		return"EcomListProducts"; 
-	}
-	
 	@GetMapping("/userproducts")
 	public String userProducts(Model model)
 	{

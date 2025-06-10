@@ -11,6 +11,8 @@ import com.entity.EcomProductEntity;
 @Repository
 public interface EcomProductRepository extends JpaRepository<EcomProductEntity, Integer>
 {
+	
+	
 	@Query(value = "SELECT * FROM ecomproducts LIMIT 9", nativeQuery = true)
 	List<EcomProductEntity> findTop9();
 }

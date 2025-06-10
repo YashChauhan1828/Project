@@ -27,6 +27,7 @@
 		{
 			out.print("<tr>");
 			out.print("<td>"+p.getProductId()+"</td><td>"+p.getProductName() + "</td><td><a href='deleteproducts?productId="+p.getProductId()+"'>Delete</a></td><td><a href='viewproduct?productId="+p.getProductId()+"'>View</a></td>");
+			out.print("<td><a href=editproducts?productId="+p.getProductId()+">Edit</a></td>");
 			out.print("</tr>");
 		}
 	
