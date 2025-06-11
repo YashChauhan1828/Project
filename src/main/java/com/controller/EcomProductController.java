@@ -1,6 +1,7 @@
 package com.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,5 +31,29 @@ public class EcomProductController
 		List<EcomProductEntity> products = productdao.findTop9();
 		model.addAttribute("products", products);
 		return"EcomHomeProducts";
+	}
+	@GetMapping("/userproductview")
+	public String userProductView(EcomProductEntity productbean,Model model)
+	{
+		Optional<EcomProductEntity>	product=productdao.findById(productbean.getProductId());
+		if(product == null)
+		{
+			return "Error";
+		}
+		else
+		{
+			model.addAttribute("product",product.get());
+			return"UserViewProduct";
+		}
+	}
+	@GetMapping("/search")
+	public String Search(@RequestParam("query") String query,Model model)
+	{
+		
+		List<EcomProductEntity> products =productdao.findByCategoryContainingIgnoreCaseOrProductNameContainingIgnoreCase(query, query);
+//		List<EcomProductEntity> product = productdao.findByProductNameContainingIgnoreCaseAndPriceLessThan(query, ;
+		model.addAttribute("products", products);
+//		model.addAttribute("products", product);
+		return"SearchProducts";
 	}
 }

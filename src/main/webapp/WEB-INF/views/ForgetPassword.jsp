@@ -64,33 +64,33 @@
     </div>
 </nav>
 
- <div class="container-fluid">
- 	<div class="row">
+<div class="container-fluid">
+	<div class="row">
 		<div class="col-md-3">
 		
 		</div>
-	<div class="col-md-6">
-		<h1>Ecom SignUp</h1>
- 	<form action="esignup" method="post" enctype="multipart/form-data" >
- 
-	<div class="form-group">
-		<label>FirstName: </label><input type="text" class="form-control" name="firstName" placeholder="Enter your name" value="${result.getFieldValue('firstName')}"/><span style="color: red">${result.getFieldError('first_name').getDefaultMessage()}</span><br>
+		<div class="col-md-6">
+			<h1> Ecom Reset Password</h1>
+
+
+			<form action="updatepassword" method="post">
+			<div class="form-group">
+			<label>Email: </label><input type="text" class="form-control" name="email"  value="${emailValue}" placeholder="Enter your Email Address"/><span style="color: red" >${emailError}</span><br>
+			</div>
+			<div class="form-group">
+			<label>New Password: </label><input type="password" class="form-control" name="newpassword" value="${passwordValue}" placeholder="Enter New Password" /><span style="color: red">${passwordError}</span><br><br>
+			  
+			</div>
+			<div class="form-group">
+			<label>Confirm Password: </label><input type="password" class="form-control" name="confirmpassword" value="${passwordValue}" placeholder="Enter confirm Password" /><span style="color: red">${passwordError}</span><br><br>
+			  
+			</div>
+			<input type="submit" value="Reset Password" class="btn btn-success"/>
+			</form><br>
+			<p class="sign-up">Don't have an Account?<a href="esignup"> Sign Up</a></p>
+		</div>
+		
 	</div>
-	<div class="form-group">
-		<label>Email: </label><input type="email" class="form-control" name="email" placeholder="Enter your Email" value="${result.getFieldValue('email')}"/><span style="color: red" >${result.getFieldError("email").getDefaultMessage()}</span><br>
-	</div>
-	<div class="form-group">
-		<label>Password: </label><input type="password" class="form-control" name="password" placeholder="Enter your password" value="${result.getFieldValue('password')}"/><span style="color: red">${result.getFieldError("email").getDefaultMessage()}</span><br>
-	</div>
-	<div class="form-group">
-		<label>ProfilePicture: </label><input class="form-control" type="file" name="profilePicture"/><br>
-	<br>
-	</div>
-		<input type="submit" value="Signup" class="btn btn-success"/>  
- 	</form>
- 	 <p class="sign-up text-center">Already have an Account?<a href="/elogin">Login</a></p>
- 	</div>
- </div> 
- </div>
+</div>
 </body>
 </html>

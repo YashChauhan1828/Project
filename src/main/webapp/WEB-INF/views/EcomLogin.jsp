@@ -73,6 +73,7 @@
 			<h1> Ecom Login</h1>
 
 			${error}
+			${updatepassword }
 			<form action="elogin" method="post">
 			<div class="form-group">
 			<label>Email: </label><input type="text" class="form-control" name="email" placeholder="Enter your Email Address"/><br>
@@ -82,6 +83,8 @@
 			</div>
 			<input type="submit" value="login" class="btn btn-success"/>
 			</form>
+			<a href="updatepassword" class="forgot-pass">Forgot password</a>
+			<p class="sign-up">Don't have an Account?<a href="esignup"> Sign Up</a></p>
 		</div>
 		
 	</div>
