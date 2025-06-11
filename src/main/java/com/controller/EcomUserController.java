@@ -35,7 +35,6 @@ public class EcomUserController
 
 		if(result.hasErrors())
 		{
-//			
 			model.addAttribute("result",result);
 			return "EcomSignUp";
 		}

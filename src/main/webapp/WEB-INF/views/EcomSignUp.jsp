@@ -74,13 +74,13 @@
  	<form action="esignup" method="post" enctype="multipart/form-data" >
  
 	<div class="form-group">
-		<label>FirstName: </label><input type="text" class="form-control" name="firstName" placeholder="Enter your name" value="${result.getFieldValue('firstName')}"/><span style="color: red">${result.getFieldError('first_name').getDefaultMessage()}</span><br>
+		<label>FirstName: </label><input type="text" class="form-control" name="first_name" placeholder="Enter your name" value="${result.getFieldValue('first_name')}"/><span style="color: red">${result.getFieldError('first_name').getDefaultMessage()}</span><br>
 	</div>
 	<div class="form-group">
 		<label>Email: </label><input type="email" class="form-control" name="email" placeholder="Enter your Email" value="${result.getFieldValue('email')}"/><span style="color: red" >${result.getFieldError("email").getDefaultMessage()}</span><br>
 	</div>
 	<div class="form-group">
-		<label>Password: </label><input type="password" class="form-control" name="password" placeholder="Enter your password" value="${result.getFieldValue('password')}"/><span style="color: red">${result.getFieldError("email").getDefaultMessage()}</span><br>
+		<label>Password: </label><input type="password" class="form-control" name="password" placeholder="Enter your password" value="${result.getFieldValue('password')}"/><span style="color: red">${result.getFieldError("password").getDefaultMessage()}</span><br>
 	</div>
 	<div class="form-group">
 		<label>ProfilePicture: </label><input class="form-control" type="file" name="profilePicture"/><br>
