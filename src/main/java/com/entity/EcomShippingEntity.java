@@ -1,7 +1,5 @@
 package com.entity;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,22 +11,23 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-
 @Entity
-@Table(name = "ecomproducts")
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "ecomshippingdetails")
 @Data
-public class EcomProductEntity 
-{ 
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class EcomShippingEntity 
+{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 Integer productId;
-	 String productName;
-	 String category;
-	 Integer qty;
-	 float price;
-	 String productImagePath;
-
-	 @OneToMany(mappedBy = "product")
-	 List<EcomCartItemEntity> cartItems;
+	Integer shippingId;
+	String recipientName;
+	String address;
+	String city;
+	String state;
+	String zipCode;
+	String country;
+	String phoneNumber;
+//	@OneToMany
+//	@JoinColumn(name = "user_id")
+//	UserEntity user;
 }
