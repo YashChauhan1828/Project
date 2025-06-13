@@ -82,22 +82,22 @@
             <tbody>
             <%
                 for(EcomCartItemEntity p : products) {
-                    float total = p.getProduct().getQty() * p.getProduct().getPrice();
+                    float total = p.getQty() * p.getProduct().getPrice();
                     Total_Price += total;
             %>
                 <tr>
-                    <td><%=p.getCartId() %></td>
+                    <td><%=p.getCartitemId() %></td>
                     <td><%=p.getProduct().getProductName()%></td>
                     <td><img src="<%=p.getProduct().getProductImagePath()%>" alt="Product Image" class="product-img" /></td>
                     <td>₹<%=p.getProduct().getPrice() %></td>
                     <td><%=p.getQty() %></td>
                     <td>₹<%=total %></td>
                     <td class="action-links">
-                        <a href="minusqty?cartId=<%=p.getCartId() %>" class="btn btn-sm btn-outline-secondary">-</a>
-                        <a href="plusqty?cartId=<%=p.getCartId() %>" class="btn btn-sm btn-outline-primary">+</a>
+                        <a href="minusqty?cartitemId=<%=p.getCartitemId() %>" class="btn btn-sm btn-outline-secondary">-</a>
+                        <a href="plusqty?cartitemId=<%=p.getCartitemId() %>" class="btn btn-sm btn-outline-primary">+</a>
                     </td>
                     <td>
-                        <a href="removecartitem?cartId=<%=p.getCartId() %>" class="btn btn-sm btn-danger">Remove</a>
+                        <a href="removecartitem?cartitemId=<%=p.getCartitemId() %>" class="btn btn-sm btn-danger">Remove</a>
                     </td>
                 </tr>
             <% } %>

@@ -1,11 +1,13 @@
 package com.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -13,24 +15,19 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "ecomcartitem")
+@Table(name = "cart" )
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EcomCartItemEntity 
+public class EcomCartEntity 
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer cartitemId;	
-	Integer qty;
-
-	@ManyToOne
-	@JoinColumn(name = "cartId")
-	EcomCartEntity cart;
-
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	EcomProductEntity product;
+	Integer cartId;
+	@OneToOne
+	@JoinColumn(name = "user_id")
+	UserEntity user;
 	
-
-		
+	@OneToMany(mappedBy = "cart")
+	List<EcomCartItemEntity> cartItems;
+	
 }

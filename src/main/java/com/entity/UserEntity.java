@@ -42,6 +42,5 @@ public class UserEntity
 	@NotBlank(message = "Profile picture required")
 	private String profile_picture_path;
 
-	@OneToMany(mappedBy = "user")
-	List<EcomCartItemEntity> cartItems;
+	
 }
