@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -27,7 +28,7 @@ public class EcomShippingEntity
 	String zipCode;
 	String country;
 	String phoneNumber;
-//	@OneToMany
-//	@JoinColumn(name = "user_id")
-//	UserEntity user;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	UserEntity user;
 }
