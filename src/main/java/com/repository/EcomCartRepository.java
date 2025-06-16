@@ -12,5 +12,6 @@ public interface EcomCartRepository extends JpaRepository<EcomCartItemEntity, In
 {
 	List<EcomCartItemEntity> findByCart(EcomCartEntity cart);
 	EcomCartItemEntity findByCartitemId(Integer cartitemId);
+//	List<EcomCartItemEntity> findByCartitemId(Integer cartitemId);
 	EcomCartItemEntity save(Integer qty);
 }

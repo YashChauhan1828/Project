@@ -44,4 +44,8 @@ public class UserEntity
 
 	@OneToMany(mappedBy = "user")
 	List<EcomShippingEntity> ships;
+
+	 @OneToMany(mappedBy = "user" )
+	 List<EcomOrderEntity> orders;
+	
 }

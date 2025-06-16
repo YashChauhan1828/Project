@@ -7,32 +7,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "ecomcartitem")
+@Table(name = "orderitementity")
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class EcomCartItemEntity 
+@FieldDefaults(level = AccessLevel.PRIVATE )
+public class EcomOrderItemEntity 
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer cartitemId;	
+	Integer orderItemId;
+	
 	Integer qty;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "cartId")
-	EcomCartEntity cart;
+	@JoinColumn(name = "orderId")
+	EcomOrderEntity order;
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	EcomProductEntity product;
-	
-	
 }
