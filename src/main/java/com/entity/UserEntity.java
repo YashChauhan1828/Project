@@ -28,18 +28,18 @@ public class UserEntity
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer user_id;
-	@NotBlank(message = "Please Enter Your Name")
+//	@NotBlank(message = "Please Enter Your Name")
 //	@Length(min = 3 , max = 12 , message = "Please Enter proper Name") 
-	@Pattern(regexp = "[a-zA-Z]+",message = "Please Enter Valid Name")
+//	@Pattern(regexp = "[a-zA-Z]+",message = "Please Enter Valid Name")
 	private String first_name;
-	@NotBlank(message = "Please Enter Your Email")
-	@Pattern( regexp = "[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z0-9]{2,3}" , message = "Please Enter valid email")
+//	@NotBlank(message = "Please Enter Your Email")
+//	@Pattern( regexp = "[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z0-9]{2,3}" , message = "Please Enter valid email")
 	private String email;
-	@NotBlank(message = "Please Enter Your Password")
-	@Length(min = 8 , max = 15 , message = "Please Enter proper password")
-	@Pattern(regexp = "[a-zA-Z0-9]+@[0-9a-zA_Z]+" , message = "Please Enter valid password")
+//	@NotBlank(message = "Please Enter Your Password")
+//	@Length(min = 8 , max = 15 , message = "Please Enter proper password")
+//	@Pattern(regexp = "[a-zA-Z0-9]+@[0-9a-zA_Z]+" , message = "Please Enter valid password")
 	private String password;
-	@NotBlank(message = "Profile picture required")
+//	@NotBlank(message = "Profile picture required")
 	private String profile_picture_path;
 
 	@OneToMany(mappedBy = "user")
