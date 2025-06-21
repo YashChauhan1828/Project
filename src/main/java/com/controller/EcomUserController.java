@@ -1,6 +1,12 @@
 package com.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,9 +14,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.entity.UserEntity;
 import com.repository.EcomUserRepository;
+import com.service.TokenService;
 import com.service.fileUploadService;
 import com.utils.Validators;
 import jakarta.servlet.http.HttpSession;
@@ -20,25 +28,35 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-public class EcomUserController 
-{
+@RequestMapping("/api/public")
+public class EcomUserController {
 	@Autowired
 	fileUploadService fileUploadService;
-	
+
 	@Autowired
 	EcomUserRepository userdao;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	TokenService tokenservice;
+
 	@PostMapping("/esignup")
-	public UserEntity signupPost( @RequestParam("first_name") String firstName,
-	        @RequestParam("email") String email,
-	        @RequestParam("password") String password,
-	        @RequestParam("profilePicture") MultipartFile profilePicture,   Model model) 
+	public ResponseEntity<?> signupPost(@RequestParam("first_name") String firstName,
+			@RequestParam("email") String email, @RequestParam("password") String password,
+			@RequestParam("profilePicture") MultipartFile profilePicture, Model model) 
 	{
+		UserEntity userop = userdao.findByEmail(email);
+		if (userop!=null) {
+			Map<String, Object> response = new HashMap<>();
+			response.put("sucess", false);
+			response.put("message", "Email Already Exists");
+			return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
+		} else 
+		{
 			String encryptedPassword = passwordEncoder.encode(password);
-		
+
 //		if(result.hasErrors())
 //		{
 //			model.addAttribute("result",result);
@@ -46,56 +64,54 @@ public class EcomUserController
 //		}
 //		else
 //		{
-		 UserEntity user = new UserEntity();
-		    user.setFirst_name(firstName);
-		    user.setEmail(email);
-		    user.setPassword(encryptedPassword);
-		    
+			UserEntity user = new UserEntity();
+			user.setFirst_name(firstName);
+			user.setEmail(email);
+			user.setPassword(encryptedPassword);
+
 			fileUploadService.uploadUserImage(profilePicture, user.getEmail());
 
 			String filePath = "images\\profilepicture\\" + user.getEmail() + "\\"
 					+ profilePicture.getOriginalFilename();
 
 			user.setProfile_picture_path(filePath);
+			
 			userdao.save(user);
-			return user;
+			Map<String, Object> response = new HashMap<>();
+			response.put("success", true);
+			return ResponseEntity.ok(response);
+		}
 
 //		}
 	}
+
+	@PostMapping("/elogin")
+	public ResponseEntity<?> EcomLogin(@RequestBody UserEntity user, Model model, HttpSession session) 
+	{
+
+		UserEntity dbUser = userdao.findByEmail(user.getEmail());
+
+		if (dbUser==null || !passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
+			Map<String, Object> response = new HashMap<>();
+			response.put("sucess", false);
+			response.put("message", "Invalid Credentials");
+			return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body(response);
+		} 
+		else 
+		{
+			String authToken = tokenservice.generateToken();
+			dbUser.setToken(authToken);
+			userdao.save(dbUser);
+			Map<String, Object> response = new HashMap<>();
+			response.put("success", true);
+			response.put("message", "Login successful");
+			response.put("token", dbUser.getToken());
+			
+			return ResponseEntity.ok(response);
+		}
+	}
+
 	
-//	@GetMapping("elogin")
-//	public String Elogin() 
-//	{
-//		
-//		return "EcomLogin";
-//	}
-//	@PostMapping("/elogin")
-//	public String EcomLogin(UserEntity user , Model model , HttpSession session) 
-//	{
-//		
-//		UserEntity dbUser = userdao.findByEmailAndPassword(user.getEmail(), user.getPassword());
-//		
-//		if(dbUser==null)
-//		{
-//			model.addAttribute("error","Inavlid Credentials");
-//			return "EcomLogin";
-//		}
-//		else
-//		{
-//			session.setAttribute("user", dbUser);
-//			System.out.println(dbUser.getFirst_name());
-//			System.out.println(dbUser.getProfile_picture_path());
-//			model.addAttribute("firstName", dbUser.getFirst_name());
-//			model.addAttribute("profilePicturePath",dbUser.getProfile_picture_path());
-//			return "Welcome";
-//		}
-//	}
-	
-//	@GetMapping("/updatepassword")
-//	public String updatePassword()
-//	{
-//		return "ForgetPassword";
-//	}
 //	
 //	@PostMapping("/updatepassword")
 //	public String EupdatePassword(@RequestParam("email") String email, @RequestParam("newpassword") String password,

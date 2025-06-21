@@ -41,6 +41,7 @@ public class UserEntity
 	private String password;
 //	@NotBlank(message = "Profile picture required")
 	private String profile_picture_path;
+	String token;
 
 	@OneToMany(mappedBy = "user")
 	List<EcomShippingEntity> ships;

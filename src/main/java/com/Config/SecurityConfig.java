@@ -20,6 +20,17 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().permitAll()
             );
+//        	.formLogin(form -> form
+//                .loginPage("/elogin") // custom login page URL
+//                .loginProcessingUrl("/doLogin") // form action URL
+//                .successHandler("/ehome") // after successful login
+//                .permitAll()
+//            )
+//            .logout(logout -> logout
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/login")
+//                .permitAll()
+//            );
         return http.build();
     }
 }
