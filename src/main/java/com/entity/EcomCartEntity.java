@@ -2,6 +2,8 @@ package com.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +27,7 @@ public class EcomCartEntity
 	Integer cartId;
 	@OneToOne
 	@JoinColumn(name = "user_id")
+	 @JsonIgnore
 	UserEntity user;
 	
 	@OneToMany(mappedBy = "cart")

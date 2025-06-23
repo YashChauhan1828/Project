@@ -2,6 +2,8 @@ package com.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,5 +32,6 @@ public class EcomProductEntity
 	 String productImagePath;
 
 	 @OneToMany(mappedBy = "product")
+	 @JsonIgnore 
 	 List<EcomCartItemEntity> cartItems;
 }

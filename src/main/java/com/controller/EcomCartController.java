@@ -1,13 +1,22 @@
 package com.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.entity.EcomCartEntity;
 import com.entity.EcomCartItemEntity;
@@ -20,32 +29,32 @@ import com.repository.EcomUserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
-@Controller
-public class EcomCartController 
-{
+@RestController
+public class EcomCartController {
 	@Autowired
 	CartRepository cartdao;
 	@Autowired
 	EcomCartRepository cartitemdao;
-	
+
 	@Autowired
 	EcomProductRepository productdao;
 
 	@Autowired
 	EcomUserRepository userdao;
-	
-	@GetMapping("/addtocart")
-	public String addToCart(@RequestParam("productId") Integer productId,HttpSession session)
+
+	@GetMapping("/addtocart/{productId}")
+	public String addToCart(@PathVariable("productId") Integer productId, HttpSession session)
 	{
-		UserEntity userbean = (UserEntity)session.getAttribute("user");
-		if(userbean == null)
+		UserEntity userbean = (UserEntity) session.getAttribute("user");
+
+		if (userbean == null) 
 		{
-			return "EcomLogin";
-		}
-		else
+			return "Fail";
+		} 
+		else 
 		{
 			Integer userId = userbean.getUser_id();
-			UserEntity user = userdao.findById(userId).orElseThrow();  
+			UserEntity user = userdao.findById(userId).orElseThrow();
 			EcomCartEntity cart = cartdao.findByUser(user);
 			if (cart == null) 
 			{
@@ -63,57 +72,115 @@ public class EcomCartController
 				cartitem.setQty(1);
 				cartitemdao.save(cartitem);
 			}
-			return "redirect:/userproducts";
+			return "Success";
 		}
 	}
-	
+
 	@GetMapping("/mycart")
-	public String myCart(HttpSession session, Model model ) 
+	public ResponseEntity<?> myCart(HttpSession session, Model model) 
 	{
 		UserEntity user = (UserEntity) session.getAttribute("user");
-		if (user == null) 
+		Map<String, Object> response = new HashMap<>();
+		if (user == null)
 		{
-			return "EcomLogin";
+			response.put("sucess", false);
+			response.put("message", "Email Already Exists");
+			return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
 		} 
 		else 
 		{
 			EcomCartEntity cart = cartdao.findByUser(user);
 			List<EcomCartItemEntity> products = cartitemdao.findByCart(cart);
-			model.addAttribute("products", products);
-			return "MyCart";
+			response.put("products", products);
+			return ResponseEntity.ok(response);
 		}
 	}
-	@GetMapping("/removecartitem")
-	public String removeCartItem(@RequestParam("cartitemId") Integer cartId)
+
+	@DeleteMapping("/removecartitem/{cartitemId}")
+	public ResponseEntity<?> removeCartItem(@PathVariable("cartitemId") Integer cartId, HttpSession session) 
 	{
 		cartitemdao.deleteById(cartId);
-		return "redirect:/mycart";
+		UserEntity user = (UserEntity) session.getAttribute("user");
+		Map<String, Object> response = new HashMap<>();
+		if (user == null) 
+		{
+			response.put("sucess", false);
+			response.put("message", "Email Already Exists");
+			return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
+		} 
+		else 
+		{
+			EcomCartEntity cart = cartdao.findByUser(user);
+			List<EcomCartItemEntity> products = cartitemdao.findByCart(cart);
+			response.put("products", products);
+			return ResponseEntity.ok(response);
+		}
 	}
-	@GetMapping("/plusqty")
-	public String plusQty(@RequestParam("cartitemId") Integer cartitemId) 
+
+	@PutMapping("/plusqty/{cartitemId}")
+	public ResponseEntity<?> plusQty(@PathVariable("cartitemId") Integer cartitemId, HttpSession session) 
 	{
 		EcomCartItemEntity item = cartitemdao.findByCartitemId(cartitemId);
-		item.setQty(item.getQty()+1);
-		
+		item.setQty(item.getQty() + 1);
 		cartitemdao.save(item);
-		return "redirect:/mycart";
+		UserEntity user = (UserEntity) session.getAttribute("user");
+		Map<String, Object> response = new HashMap<>();
+		if (user == null) 
+		{
+			response.put("sucess", false);
+			response.put("message", "Email Already Exists");
+			return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
+		} 
+		else 
+		{
+			EcomCartEntity cart = cartdao.findByUser(user);
+			List<EcomCartItemEntity> products = cartitemdao.findByCart(cart);
+			response.put("products", products);
+			return ResponseEntity.ok(response);
+		}
 	}
-	@GetMapping("/minusqty")
-	public String minusQty(@RequestParam("cartitemId") Integer cartitemId)
+
+	@PutMapping("/minusqty/{cartitemId}")
+	public ResponseEntity<?> minusQty(@PathVariable("cartitemId") Integer cartitemId, HttpSession session) 
 	{
 		EcomCartItemEntity item = cartitemdao.findByCartitemId(cartitemId);
-		if(item.getQty()!=1)
+		Map<String, Object> response = new HashMap<>();
+		if (item.getQty() != 1) 
 		{
 			item.setQty(item.getQty() - 1);
-
 			cartitemdao.save(item);
-			return "redirect:/mycart";
-		}
-		else
+			UserEntity user = (UserEntity) session.getAttribute("user");
+			if (user == null) 
+			{
+				response.put("sucess", false);
+				response.put("message", "Email Already Exists");
+				return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
+			} 
+			else 
+			{
+				EcomCartEntity cart = cartdao.findByUser(user);
+				List<EcomCartItemEntity> products = cartitemdao.findByCart(cart);
+				response.put("products", products);
+				return ResponseEntity.ok(response);
+			}
+		} 
+		else 
 		{
 			cartitemdao.deleteById(cartitemId);
-			return "redirect:/mycart";
+			UserEntity user = (UserEntity) session.getAttribute("user");
+			if (user == null) 
+			{
+				response.put("sucess", false);
+				response.put("message", "Email Already Exists");
+				return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
+			} 
+			else 
+			{
+				EcomCartEntity cart = cartdao.findByUser(user);
+				List<EcomCartItemEntity> products = cartitemdao.findByCart(cart);
+				response.put("products", products);
+				return ResponseEntity.ok(response);
+			}
 		}
 	}
-	
 }

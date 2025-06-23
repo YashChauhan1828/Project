@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.entity.EcomShippingEntity;
 import com.entity.UserEntity;
@@ -13,7 +15,7 @@ import com.repository.EcomUserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class EcomShippingController 
 {
 	@Autowired
@@ -22,15 +24,8 @@ public class EcomShippingController
 	@Autowired
 	EcomUserRepository userdao;
 	
-	@GetMapping("/shipping")
-	public String shipping()
-	{
-		return "Shipping";
-	}
-	
-	
 	@PostMapping("/eshipping")
-	public String Shipping(EcomShippingEntity shippingbean,HttpSession session , Model model)
+	public String Shipping(@RequestBody EcomShippingEntity shippingbean,HttpSession session , Model model)
 	{
 		UserEntity user = (UserEntity)session.getAttribute("user");
 		Integer userId = user.getUser_id();
@@ -39,6 +34,6 @@ public class EcomShippingController
 //		UserEntity users = userdao.findById(userId).orElseThrow();
 		EcomShippingEntity ship = shippingdao.findLatestShippingForUser(userId);
 		session.setAttribute("ship",ship);
-		return"redirect:/payment";
+		return"sucess";
 	}
 }

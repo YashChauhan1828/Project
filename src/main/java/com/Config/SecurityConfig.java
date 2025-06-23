@@ -16,6 +16,8 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults()) // enables CORS using CorsConfigurationSource bean
             .csrf(AbstractHttpConfigurer::disable) // disables CSRF safely
             .authorizeHttpRequests(auth -> auth
+            	.requestMatchers("/images/**").permitAll()
+            	.requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().permitAll()
