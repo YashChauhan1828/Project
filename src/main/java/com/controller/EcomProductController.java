@@ -68,7 +68,7 @@ public class EcomProductController
 		if(product == null)
 		{
 			response.put("sucess", false);
-			response.put("message", "Email Already Exists");
+			response.put("message", "No Product Available");
 			return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
 		}
 		else

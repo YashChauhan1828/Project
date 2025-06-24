@@ -32,8 +32,8 @@ public class EcomShippingController
 		shippingbean.setUser(user);
 		shippingdao.save(shippingbean);
 //		UserEntity users = userdao.findById(userId).orElseThrow();
-		EcomShippingEntity ship = shippingdao.findLatestShippingForUser(userId);
-		session.setAttribute("ship",ship);
+//		EcomShippingEntity ship = shippingdao.findLatestShippingForUser(userId);
+//		session.setAttribute("ship",ship);
 		return"sucess";
 	}
 }

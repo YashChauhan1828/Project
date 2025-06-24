@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.entity.EcomShippingEntity;
 import com.entity.UserEntity;
+import com.repository.EcomShippingRepository;
 import com.repository.EcomUserRepository;
 
 import jakarta.servlet.Filter;
@@ -22,6 +24,9 @@ public class TokenConfig implements Filter
 {
 	@Autowired
 	EcomUserRepository userdao;
+	
+	@Autowired
+	EcomShippingRepository shippingdao;
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -45,7 +50,10 @@ public class TokenConfig implements Filter
 		{
 			HttpSession session = req.getSession(true); // true = create if doesn't exist
 			session.setAttribute("user", op.get());
-			
+			 if (session.getAttribute("ship") == null) {
+			        EcomShippingEntity ship = shippingdao.findLatestShippingForUser(op.get().getUser_id());
+			        session.setAttribute("ship", ship);
+			    }
 			chain.doFilter(request, response);
 		}
 		else
