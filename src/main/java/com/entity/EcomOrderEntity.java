@@ -3,6 +3,7 @@ package com.entity;
 import java.sql.Date;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +33,6 @@ public class EcomOrderEntity
 	@JoinColumn( name = "user_id")
 	UserEntity user;
 	
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order" , cascade = CascadeType.ALL)
 	List<EcomOrderItemEntity> orderitems;
 }

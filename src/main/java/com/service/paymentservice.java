@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.DTO.EcomPaymentRequest;
 import com.entity.EcomShippingEntity;
+import com.entity.UserEntity;
 
 import jakarta.servlet.http.HttpSession;
 import net.authorize.Environment;
@@ -21,6 +22,9 @@ public class Paymentservice {
     
 	@Autowired
 	HttpSession session;
+	
+	@Autowired
+	TokenService tokenservice;
 	
     public ANetApiResponse run(EcomPaymentRequest paymentbean , String email  ) {
     	
@@ -43,45 +47,76 @@ public class Paymentservice {
         paymentType.setCreditCard(creditCard);
 
         // Set email address (optional)
-        CustomerDataType customer = new CustomerDataType();
-        customer.setEmail(email);
         EcomShippingEntity shippingbean = (EcomShippingEntity) session.getAttribute("ship");
-		System.out.println("Name : "+shippingbean.getRecipientName());
+		UserEntity user = (UserEntity)session.getAttribute("user");
         
+		
 //        customer.setId(userbean.getUserId());
 
         // Create the payment transaction object
         TransactionRequestType txnRequest = new TransactionRequestType();
         txnRequest.setTransactionType(TransactionTypeEnum.AUTH_CAPTURE_TRANSACTION.value());
         txnRequest.setPayment(paymentType);
-        txnRequest.setCustomer(customer);
+        
         
         // Calculate base price and tax
         
         BigDecimal basePrice = new BigDecimal(paymentbean.getPrice());
         BigDecimal taxAmount = basePrice.multiply(new BigDecimal("0.18")).setScale(2, RoundingMode.CEILING);
+        BigDecimal shipTaxAmount = basePrice.multiply(new BigDecimal("0.5")).setScale(2,RoundingMode.CEILING);
         BigDecimal totalAmount = basePrice.add(taxAmount).setScale(2, RoundingMode.CEILING);
+        BigDecimal finalAmount = totalAmount.add(shipTaxAmount).setScale(2, RoundingMode.CEILING);
 
         // Set tax
-        ExtendedAmountType tax = new ExtendedAmountType();
-        tax.setAmount(taxAmount);
-        tax.setName("GST");
-        tax.setDescription("Government Tax");
-        txnRequest.setTax(tax);
-
-        // Set total amount (base price + tax)
-        txnRequest.setAmount(totalAmount);
-
         
+
+        CustomerAddressType address = new CustomerAddressType();
+		address.setFirstName(user.getFirst_name());
+		txnRequest.setBillTo(address);
+        
+		CustomerDataType customerDetails = new CustomerDataType();
+		customerDetails.setId(user.getUser_id().toString());
+		customerDetails.setEmail(user.getEmail());
+		txnRequest.setCustomer(customerDetails);
+		
+		OrderType order = new OrderType();
+		order.setInvoiceNumber(tokenservice.generateOrder());
+		order.setDescription("Thank you");
+		txnRequest.setOrder(order);
+		
         NameAndAddressType customeraddress = new NameAndAddressType();
         customeraddress.setFirstName(shippingbean.getRecipientName());
         customeraddress.setAddress(shippingbean.getAddress());
         customeraddress.setCity(shippingbean.getCity());
+        customeraddress.setState(shippingbean.getState());
         customeraddress.setCountry(shippingbean.getCountry());
         customeraddress.setZip(shippingbean.getZipCode());
      // After customeraddress is populated
         txnRequest.setShipTo(customeraddress);
-       
+        
+        if(shippingbean.getCountry()=="USA"||shippingbean.getCountry()=="UAE")
+        {
+        	ExtendedAmountType tax = new ExtendedAmountType();
+            tax.setAmount(taxAmount);
+            tax.setName("GST");
+            tax.setDescription("Government Tax");
+            ExtendedAmountType shippingtax = new ExtendedAmountType();
+            shippingtax.setAmount(shipTaxAmount);
+            shippingtax.setName(" Standard Shipping");
+            txnRequest.setShipping(shippingtax);
+            txnRequest.setTax(tax);
+            txnRequest.setAmount(finalAmount);
+        }
+        else
+        {
+        	ExtendedAmountType tax = new ExtendedAmountType();
+        	tax.setAmount(taxAmount);
+        	tax.setName("GST");
+        	tax.setDescription("Government Tax");
+        	txnRequest.setTax(tax);
+        	txnRequest.setAmount(totalAmount);
+        }
+        
         // Create the API request and set the parameters for this specific request
         CreateTransactionRequest apiRequest = new CreateTransactionRequest();
         apiRequest.setMerchantAuthentication(merchantAuthenticationType);
@@ -108,7 +143,7 @@ public class Paymentservice {
                     System.out.println("Message Code: " + result.getMessages().getMessage().get(0).getCode());
                     System.out.println("Description: " + result.getMessages().getMessage().get(0).getDescription());
                     System.out.println("Auth Code: " + result.getAuthCode());             
-                    System.out.println("Email : "+customer.getEmail());
+                    
                     System.out.println("Name : "+customeraddress.getFirstName());
                     System.out.println("Address : "+customeraddress.getAddress());
                     System.out.println("City : "+customeraddress.getCity());

@@ -35,17 +35,18 @@ public class EcomSessionController
 		Map<String, Object> response = new HashMap<>();
 //		String name = user.getFirst_name();
 		response.put("firstName", user.getFirst_name());
-		 try {
-		        String imagePath = "D:/sts/project-hibernate/src/main/webapp/" + user.getProfile_picture_path();
-		        Path path = Paths.get(imagePath);
-		        byte[] imageBytes = Files.readAllBytes(Paths.get(imagePath));
-		        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-		        String mimeType = Files.probeContentType(path);
-		        
-		        response.put("profileImageBase64", "data:" + mimeType + ";base64," + base64Image);
-		    } catch (IOException e) {
-		        response.put("profileImageBase64", null);
-		    }
+		response.put("profilePicPath", user.getProfile_picture_path());
+//		 try {
+//		        String imagePath = "D:/sts/project-hibernate/src/main/webapp/" + user.getProfile_picture_path();
+//		        Path path = Paths.get(imagePath);
+//		        byte[] imageBytes = Files.readAllBytes(Paths.get(imagePath));
+//		        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+//		        String mimeType = Files.probeContentType(path);
+//		        
+//		        response.put("profileImageBase64", "data:" + mimeType + ";base64," + base64Image);
+//		    } catch (IOException e) {
+//		        response.put("profileImageBase64", null);
+//		    }
 	    
 //		response.put("profilePicturePath", "http://localhost:9999/api/user/profile-image");
 		return ResponseEntity.ok(response);

@@ -2,12 +2,16 @@ package com.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.entity.EcomCartEntity;
 import com.entity.EcomCartItemEntity;
@@ -22,7 +26,7 @@ import com.repository.EcomUserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class EcomOrderController 
 {
 	@Autowired
@@ -41,7 +45,7 @@ public class EcomOrderController
 	EcomOrderItemRepository orderitemdao;
 	
 	@GetMapping("/orderhistory")
-	public String orderHistory(EcomCartItemEntity cartItem,HttpSession session,Model model)
+	public ResponseEntity<?> orderHistory(EcomCartItemEntity cartItem,HttpSession session,Model model)
 	{
 		UserEntity userbean = (UserEntity)session.getAttribute("user");
 		Integer userId = userbean.getUser_id();
@@ -51,10 +55,7 @@ public class EcomOrderController
 		
 		EcomOrderEntity order = new EcomOrderEntity();
 	        order.setUser(user);
-	    
-	        order = orderdao.save(order);
 	        order.setOrderitems(new ArrayList<>());
-		
 	        for (EcomCartItemEntity cartItem1 : cartitems) {
 	            EcomOrderItemEntity orderItem = new EcomOrderItemEntity();
 	            orderItem.setOrder(order);
@@ -62,13 +63,15 @@ public class EcomOrderController
 	            orderItem.setProduct(cartItem1.getProduct());
 	           
 	            order.getOrderitems().add(orderItem);
+//	            orderitemdao.save(orderItem);
+	            orderdao.save(order);
 	        }
 	        
-	        orderitemdao.saveAll(order.getOrderitems());
-	        List<EcomOrderEntity> orders = orderdao.findByUser(user);
-	        model.addAttribute("orders", orders);
+	        cartitemdao.deleteAll(cartitems);
+	        List<EcomOrderEntity> products = orderdao.findByUser(user);
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("products", products);
 	        
-	        
-		return"OrderHistory";
+		return ResponseEntity.ok(response);
 	}
 }

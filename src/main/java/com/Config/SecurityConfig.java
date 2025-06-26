@@ -23,6 +23,7 @@ public class SecurityConfig {
 					auth
 						.requestMatchers("/images/**").permitAll()
 						.requestMatchers("/api/public/**").permitAll()
+						.requestMatchers("/api/admin/**").permitAll()
 						 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 					     .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
 					     .anyRequest().permitAll()

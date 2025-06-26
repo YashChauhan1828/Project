@@ -1,5 +1,6 @@
 package com.controller;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.entity.UserEntity;
 import com.repository.EcomUserRepository;
 import com.service.TokenService;
@@ -40,6 +43,9 @@ public class EcomUserController {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	Cloudinary cloudinary;
 	
 	@Autowired
 	TokenService tokenservice;
@@ -71,12 +77,19 @@ public class EcomUserController {
 			user.setEmail(email);
 			user.setPassword(encryptedPassword);
 
-			fileUploadService.uploadUserImage(profilePicture, user.getEmail());
+			try {
+			Map result	= cloudinary.uploader().upload(profilePicture.getBytes(), ObjectUtils.emptyMap());
+			user.setProfile_picture_path(result.get("url").toString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			fileUploadService.uploadUserImage(profilePicture, user.getEmail());
+//
+//			String filePath = "images\\profilepicture\\" + user.getEmail() + "\\"
+//					+ profilePicture.getOriginalFilename();
 
-			String filePath = "images\\profilepicture\\" + user.getEmail() + "\\"
-					+ profilePicture.getOriginalFilename();
-
-			user.setProfile_picture_path(filePath);
+			
 			
 			userdao.save(user);
 			Map<String, Object> response = new HashMap<>();
