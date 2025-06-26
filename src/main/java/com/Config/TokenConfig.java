@@ -36,7 +36,7 @@ public class TokenConfig implements Filter
 		
 		String url = req.getRequestURI().toString();
 		System.out.println(url);
-		if(url.contains("public"))
+		if(url.contains("public")||url.contains("admin"))
 		{
 			chain.doFilter(request, response);
 		}

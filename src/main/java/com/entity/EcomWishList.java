@@ -10,32 +10,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-
 @Entity
-@Table(name = "ecomproducts")
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "ecomwishcart")
 @Data
-public class EcomProductEntity 
-{ 
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class EcomWishList 
+{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 Integer productId;
-	 String productName;
-	 String category;
-	 Integer qty;
-	 float price;
-	 String productImagePath;
+	Integer wishcartId;
+	
+	@OneToOne
+	@JoinColumn(name = "user_id")
+	@JsonIgnore
+	UserEntity user;
 
-	 @OneToMany(mappedBy = "product")
-	 @JsonIgnore 
-	 List<EcomCartItemEntity> cartItems;
-	 
-	 @OneToMany(mappedBy = "product")
-	 @JsonIgnore
-	 List<EcomWishCartItemEntity> wishitems;
+	@OneToMany(mappedBy = "wishcart")
+	List<EcomWishCartItemEntity> wishitems;
 }
