@@ -35,7 +35,8 @@ import com.repository.EcomWishRepository;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-public class EcomCartController {
+public class EcomCartController
+{
 	@Autowired
 	CartRepository cartdao;
 	@Autowired
@@ -266,5 +267,6 @@ public class EcomCartController {
 				return ResponseEntity.ok(response);
 			}
 		}
+		
 	}
 }

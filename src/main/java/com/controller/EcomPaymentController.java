@@ -21,14 +21,6 @@ public class EcomPaymentController
 	@Autowired
 	Paymentservice paymentservice; 
 	
-//	@Autowired
-//	EcomShippingRepository shippingdao;
-	
-//	@GetMapping("/payment")
-//	public String Payment()
-//	{
-//		return "Checkout";
-//	}
 	@PostMapping("/epayment")
 	public String Epayment(@RequestBody EcomPaymentRequest paymentbean,HttpSession session)
 	{

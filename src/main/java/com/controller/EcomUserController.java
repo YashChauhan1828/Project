@@ -84,20 +84,12 @@ public class EcomUserController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//			fileUploadService.uploadUserImage(profilePicture, user.getEmail());
-//
-//			String filePath = "images\\profilepicture\\" + user.getEmail() + "\\"
-//					+ profilePicture.getOriginalFilename();
-
-			
-			
 			userdao.save(user);
 			Map<String, Object> response = new HashMap<>();
 			response.put("success", true);
 			return ResponseEntity.ok(response);
 		}
-
-//		}
+		
 	}
 
 	@PostMapping("/elogin")
@@ -128,60 +120,24 @@ public class EcomUserController {
 
 	
 //	
-//	@PostMapping("/updatepassword")
-//	public String EupdatePassword(@RequestParam("email") String email, @RequestParam("newpassword") String password,
-//			@RequestParam("confirmpassword") String password2 , Model model )
-//	{
-//	boolean isError = false;
-//	if(Validators.isBlank(password))
-//	{
-//		isError = true;
-//		model.addAttribute("passwordError","PLease enter new password");
-//
-//	}
-//	else if(Validators.isPass(password)==false)
-//	{
-//		isError = true;
-//		model.addAttribute("passwordError","PLease enter valid password");
-//
-//	}
-//	else if(password.matches(password2)==false)
-//	{
-//		isError = true;
-//		model.addAttribute("passwordError","Password must match");
-//	}
-//	else
-//	{
-//		model.addAttribute("passwordValue",password);
-//	}
-//	if(Validators.isBlank(email))
-//	{
-//		isError = true;
-//		model.addAttribute("emailError","PLease enter your Email");
-//
-//	}
-//	else if(Validators.isEmail(email)==false)
-//	{
-//		isError = true;
-//		model.addAttribute("emailError","PLease enter valid Email");
-//	}
-//	else
-//	{
-//		model.addAttribute("emailValue",email);
-//	}
-//	if(isError)
-//	{
-//		return "ForgetPassword";
-//	}
-//	else
-//	{
-//		UserEntity user = userdao.findByEmail(email);
-//		user.setPassword(password);
-//		userdao.save(user);
-//		model.addAttribute("updatepassword", "Password Updated Sucessfully");
-//		return "EcomLogin";
-//	}
-//}
+	@PostMapping("/updatepassword")
+	public String EupdatePassword(@RequestParam("email") String email, @RequestParam("password1") String password1,
+			@RequestParam("password2") String password2, Model model) 
+	{
+		UserEntity user = userdao.findByEmail(email);
+		if(password1.matches(password2))
+		{
+			String encryptedPassword1 = passwordEncoder.encode(password1);
+			user.setPassword(encryptedPassword1);
+		userdao.save(user);
+		model.addAttribute("updatepassword", "Password Updated Sucessfully");
+		return "EcomLogin";
+		}
+		else 
+		{
+			return "Fail";
+		}
+		}
 //	
 //	@GetMapping("/ehome")
 //	public String eHome()

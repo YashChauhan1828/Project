@@ -53,4 +53,7 @@ public class UserEntity
 	 @JsonIgnore
 	 List<EcomOrderEntity> orders;
 	
+	 @OneToMany(mappedBy = "user")
+	 @JsonIgnore
+	 List<EcomReviewEntity> reviews;
 }

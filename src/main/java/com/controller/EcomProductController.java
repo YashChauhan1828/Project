@@ -1,10 +1,7 @@
 package com.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
+
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,19 +10,23 @@ import java.util.Optional;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.DTO.EcomProductRequest;
 import com.entity.EcomProductEntity;
+import com.entity.EcomReviewEntity;
+import com.entity.UserEntity;
 import com.repository.EcomProductRepository;
+import com.repository.EcomReviewRepository;
 import com.service.fileUploadService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @RestController
@@ -38,25 +39,14 @@ public class EcomProductController
 	@Autowired
 	EcomProductRepository productdao;
 	
+	@Autowired
+	EcomReviewRepository reviewdao;
+	
 	@GetMapping("/userproducts")
 	public ResponseEntity<?> userProducts(Model model)
 	{
 		List<EcomProductEntity> products = productdao.findTop9();
 		Map<String, Object> response = new HashMap<>();
-		
-//			try {
-//		        String imagePath = "D:/sts/project-hibernate/src/main/webapp/" + product.getProductImagePath();
-//		        Path path = Paths.get(imagePath);
-//		        byte[] imageBytes = Files.readAllBytes(Paths.get(imagePath));
-//		        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-//		        String mimeType = Files.probeContentType(path);
-//
-//		        response.put("profileImageBase64", "data:" + mimeType + ";base64," + base64Image);
-//		    } catch (IOException e) {
-//		        response.put("profileImageBase64", null);
-//		    }
-		
-		
 		response.put("products", products);
 		return ResponseEntity.ok(response);
 	}
@@ -78,6 +68,8 @@ public class EcomProductController
 			return ResponseEntity.ok(response);
 		}
 	}
+	
+		
 	@GetMapping("/search")
 	public String Search(@RequestParam("query") String query,Model model)
 	{

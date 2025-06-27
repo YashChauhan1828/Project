@@ -27,8 +27,6 @@ public class EcomOrderEntity
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer orderId;
 
-	
-	
 	@ManyToOne
 	@JoinColumn( name = "user_id")
 	UserEntity user;

@@ -38,4 +38,8 @@ public class EcomProductEntity
 	 @OneToMany(mappedBy = "product")
 	 @JsonIgnore
 	 List<EcomWishCartItemEntity> wishitems;
+	 
+	 @OneToMany(mappedBy = "product")
+	 @JsonIgnore
+	 List<EcomReviewEntity> reviews;
 }
