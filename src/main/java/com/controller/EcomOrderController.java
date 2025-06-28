@@ -1,6 +1,7 @@
 package com.controller;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,8 @@ public class EcomOrderController
 	            orderItem.setOrder(order);
 	            orderItem.setQty(cartItem1.getQty());
 	            orderItem.setProduct(cartItem1.getProduct());
-	           
+	            orderItem.setStatus("Pending");
+	            orderItem.setOrderDate(LocalDateTime.now());
 	            order.getOrderitems().add(orderItem);
 //	            orderitemdao.save(orderItem);
 	            orderdao.save(order);

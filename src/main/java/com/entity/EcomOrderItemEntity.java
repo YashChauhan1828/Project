@@ -1,5 +1,6 @@
 package com.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +28,8 @@ public class EcomOrderItemEntity
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer orderItemId;
-	
+	String Status;
+	LocalDateTime orderDate;
 	Integer qty;
 	
 	@ManyToOne

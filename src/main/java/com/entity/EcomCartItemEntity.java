@@ -27,6 +27,7 @@ public class EcomCartItemEntity
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer cartitemId;	
 	Integer qty;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "cartId")

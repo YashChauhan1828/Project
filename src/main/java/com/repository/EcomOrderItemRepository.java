@@ -1,6 +1,7 @@
 package com.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,4 +12,6 @@ public interface EcomOrderItemRepository extends JpaRepository<EcomOrderItemEnti
 {
 	List<EcomOrderItemEntity> findByOrder(EcomOrderEntity order);
 //	EcomOrderItemEntity findByOrderItemId(Integer orderitemId);
+
+	 
 }

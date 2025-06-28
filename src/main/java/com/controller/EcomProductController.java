@@ -71,13 +71,21 @@ public class EcomProductController
 	
 		
 	@GetMapping("/search")
-	public String Search(@RequestParam("query") String query,Model model)
+	public ResponseEntity<?> Search(@RequestParam("query") String query,Model model)
 	{
 		
 		List<EcomProductEntity> products =productdao.findByCategoryContainingIgnoreCaseOrProductNameContainingIgnoreCase(query, query);
-//		List<EcomProductEntity> product = productdao.findByProductNameContainingIgnoreCaseAndPriceLessThan(query, ;
-		model.addAttribute("products", products);
-//		model.addAttribute("products", product);
-		return"SearchProducts";
+		Map<String, Object> response = new HashMap<>();
+		if(products == null)
+		{
+			response.put("sucess", false);
+			response.put("message", "No Product Available");
+			return ResponseEntity.status(HttpStatus.SC_CONFLICT).body(response);
+		}
+		else
+		{
+			response.put("product",products);
+			return ResponseEntity.ok(response);
+		}
 	}
 }
